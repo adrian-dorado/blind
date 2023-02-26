@@ -24,6 +24,7 @@ services:
     depends_on:
       - postgres
     environment:
+      APP_MATCHES: http://localhost:8600
       DATABASE_URL: postgres://matches:password@postgres:5432/matches
       WAIT_HOSTS: postgres:5432
       WAIT_TIMEOUT: 240
@@ -38,6 +39,7 @@ services:
     depends_on:
       - postgres
     environment:
+      APP_SOCIAL: http://localhost:8400
       DATABASE_URL: postgres://social:password@postgres:5432/social
       WAIT_HOSTS: postgres:5432
       WAIT_TIMEOUT: 240
@@ -52,6 +54,7 @@ services:
     depends_on:
       - postgres
     environment:
+      APP_USERS: http://localhost:8200
       DATABASE_URL: postgres://users:password@postgres:5432/users
       WAIT_HOSTS: postgres:5432
       WAIT_TIMEOUT: 240
@@ -67,9 +70,6 @@ services:
       HOST_OS: ${OS}
       NODE_ENV: development
       HOST: "0.0.0.0"
-      APP_MATCHES: http://localhost:8600
-      APP_SOCIAL: http://localhost:8400
-      APP_USERS: http://localhost:8200
   pgadmin:
     image: dpage/pgadmin4
     volumes:
