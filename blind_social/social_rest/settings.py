@@ -31,6 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "djwto",
+    "posts_api.apps.PostsApiConfig",
+    "messaging_api.apps.MessagingApiConfig",
+    "forum_api.apps.ForumApiConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
