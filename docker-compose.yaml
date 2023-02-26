@@ -13,22 +13,6 @@ services:
       - POSTGRES_PASSWORD=test-databases
     ports:
       - 15432:5432
-  blind_matches:
-    build:
-      context: ./blind_matches
-      dockerfile: ./Dockerfile.dev
-    ports:
-      - "8600:8000"
-    volumes:
-      - blind_matches:/app
-    depends_on:
-      - postgres
-    environment:
-      APP_MATCHES: http://localhost:8600
-      DJWTO_SIGNING_KEY: f4c79266c9c7850c6fedc7500ae7c37cbaf1bf13486d5976811f305858f0a71e
-      DATABASE_URL: postgres://matches:password@postgres:5432/matches
-      WAIT_HOSTS: postgres:5432
-      WAIT_TIMEOUT: 240
   blind_social:
     build:
       context: ./blind_social
