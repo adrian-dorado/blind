@@ -1,0 +1,81 @@
+volumes:
+  blind-data:
+    external: true
+  pgadmin:
+    external: true
+services:
+  postgres:
+    image: postgres:14.2-bullseye
+    volumes:
+      - blind-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES=users,social,matches
+      - POSTGRES_PASSWORD=test-databases
+    ports:
+      - 15432:5432
+  blind_matches:
+    build:
+      context: ./blind_matches
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - "8600:8000"
+    volumes:
+      - blind_matches:/app
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://matches:password@postgres:5432/matches
+      WAIT_HOSTS: postgres:5432
+      WAIT_TIMEOUT: 240
+  blind_social:
+    build:
+      context: ./blind_social
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - "8400:8000"
+    volumes:
+      - blind_social:/app
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://social:password@postgres:5432/social
+      WAIT_HOSTS: postgres:5432
+      WAIT_TIMEOUT: 240
+  blind_users:
+    build:
+      context: ./blind_users
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - "8200:8000"
+    volumes:
+      - blind_users:/app
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://users:password@postgres:5432/users
+      WAIT_HOSTS: postgres:5432
+      WAIT_TIMEOUT: 240
+  blind_fe:
+    image: node:lts-bullseye
+    command: /bin/bash run.sh
+    working_dir: /app
+    volumes:
+      - ./blind_fe:/app
+    ports:
+      - "3000:3000"
+    environment:
+      HOST_OS: ${OS}
+      NODE_ENV: development
+      HOST: "0.0.0.0"
+      APP_MATCHES: http://localhost:8600
+      APP_SOCIAL: http://localhost:8400
+      APP_USERS: http://localhost:8200
+  pgadmin:
+    image: dpage/pgadmin4
+    volumes:
+      - /pgadmin/var/lib/pgadmin4
+    ports:
+      - "8060:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "doradocoding@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
