@@ -25,6 +25,7 @@ services:
       - postgres
     environment:
       APP_MATCHES: http://localhost:8600
+      DJWTO_SIGNING_KEY: f4c79266c9c7850c6fedc7500ae7c37cbaf1bf13486d5976811f305858f0a71e
       DATABASE_URL: postgres://matches:password@postgres:5432/matches
       WAIT_HOSTS: postgres:5432
       WAIT_TIMEOUT: 240
@@ -40,6 +41,7 @@ services:
       - postgres
     environment:
       APP_SOCIAL: http://localhost:8400
+      DJWTO_SIGNING_KEY: f4c79266c9c7850c6fedc7500ae7c37cbaf1bf13486d5976811f305858f0a71e
       DATABASE_URL: postgres://social:password@postgres:5432/social
       WAIT_HOSTS: postgres:5432
       WAIT_TIMEOUT: 240
@@ -55,6 +57,7 @@ services:
       - postgres
     environment:
       APP_USERS: http://localhost:8200
+      DJWTO_SIGNING_KEY: f4c79266c9c7850c6fedc7500ae7c37cbaf1bf13486d5976811f305858f0a71e
       DATABASE_URL: postgres://users:password@postgres:5432/users
       WAIT_HOSTS: postgres:5432
       WAIT_TIMEOUT: 240
