@@ -1,11 +1,14 @@
 volumes:
   blind-data:
-    external: true
+    external: false
   pgadmin:
-    external: true
+    external: false
 services:
   postgres:
     image: postgres:14.2-bullseye
+    build:
+      context: ./db
+      dockerfile: ./Dockerfile.dev
     volumes:
       - blind-data:/var/lib/postgresql/data
     environment:
@@ -20,13 +23,13 @@ services:
     ports:
       - "8400:8000"
     volumes:
-      - blind_social:/app
+      - ./blind_social:/app
     depends_on:
       - postgres
     environment:
       APP_SOCIAL: http://localhost:8400
       DJWTO_SIGNING_KEY: f4c79266c9c7850c6fedc7500ae7c37cbaf1bf13486d5976811f305858f0a71e
-      DATABASE_URL: postgres://social:password@postgres:5432/social
+      DATABASE_URL: "postgres://social:password@postgres:5432/social"
       WAIT_HOSTS: postgres:5432
       WAIT_TIMEOUT: 240
   blind_users:
@@ -36,13 +39,13 @@ services:
     ports:
       - "8200:8000"
     volumes:
-      - blind_users:/app
+      - ./blind_users:/app
     depends_on:
       - postgres
     environment:
       APP_USERS: http://localhost:8200
       DJWTO_SIGNING_KEY: f4c79266c9c7850c6fedc7500ae7c37cbaf1bf13486d5976811f305858f0a71e
-      DATABASE_URL: postgres://users:password@postgres:5432/users
+      DATABASE_URL: "postgres://users:password@postgres:5432/users"
       WAIT_HOSTS: postgres:5432
       WAIT_TIMEOUT: 240
   blind_fe:
